@@ -15,9 +15,9 @@
 ## ✂️截图
 <div style="display: flex;">
     <img src="readme/snapshot1.png" alt="snapshot" style="width: 140px" />
-    <img src="readme/snapshot1.png" alt="snapshot" style="width: 140px" />
-    <img src="readme/snapshot1.png" alt="snapshot" style="width: 140px" />
-    <img src="readme/snapshot1.png" alt="snapshot" style="width: 140px" />
+    <img src="readme/snapshot2.png" alt="snapshot" style="width: 140px" />
+    <img src="readme/snapshot3.png" alt="snapshot" style="width: 140px" />
+    <img src="readme/snapshot4.png" alt="snapshot" style="width: 140px" />
 </div>
 
 
