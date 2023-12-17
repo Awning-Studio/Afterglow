@@ -23,7 +23,7 @@ class SecondClassSystem(val username: String, private val id: Int, private val t
          * @return [Flow]
          */
         fun login(username: String, password: String) = flow {
-            val form = mapOf(
+            val form = listOf(
                 Pair(
                     "para",
                     "{'school':10018,'account':'${username}','password':'${password}'}"

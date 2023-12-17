@@ -15,7 +15,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.ElevatedSuggestionChip
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -25,7 +28,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -40,6 +45,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.awning.afterglow.navroute.BottomRoute
 import com.awning.afterglow.store.Lighting
+import com.awning.afterglow.toolkit.Transformer
 import com.awning.afterglow.type.Plan
 import com.awning.afterglow.ui.component.AfterglowTextFiled
 import com.awning.afterglow.ui.halfOfPadding
@@ -49,7 +55,9 @@ import com.awning.afterglow.viewmodel.controller.PlanController
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.util.Date
 
+var deadline by mutableStateOf<LocalDate?>(null)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -58,6 +66,11 @@ fun PlanScreen() {
     val coroutineScope = rememberCoroutineScope()
     val plans by PlanController.planFlow().collectAsState(initial = emptyList())
     var planAddDialogVisible by remember { mutableStateOf(false) }
+    var datePickerDialogVisible by remember { mutableStateOf(false) }
+
+    LaunchedEffect(key1 = Unit) {
+        deadline = null
+    }
 
     Scaffold(
         topBar = { PlanTopAppBar() }
@@ -67,13 +80,6 @@ fun PlanScreen() {
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            FloatingActionButton(
-                onClick = { planAddDialogVisible = true }, modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(end = 30.dp, bottom = 60.dp)
-            ) {
-                Icon(imageVector = Icons.Rounded.Add, contentDescription = "Add")
-            }
             if (plans.isEmpty()) {
                 EmptyScreen { Text(text = "空空的") }
             } else {
@@ -137,23 +143,42 @@ fun PlanScreen() {
                     }
                 }
             }
+
+            FloatingActionButton(
+                onClick = { planAddDialogVisible = true }, modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(end = 30.dp, bottom = 60.dp)
+            ) {
+                Icon(imageVector = Icons.Rounded.Add, contentDescription = "Add")
+            }
         }
     }
 
-    PlanAddDialog(visible = planAddDialogVisible) {
+    PlanAddDialog(
+        visible = planAddDialogVisible,
+        onPickDateRequest = {
+            datePickerDialogVisible = true
+        }
+    ) {
         planAddDialogVisible = false
+    }
+
+    DatePickerAlertDialog(visible = datePickerDialogVisible, onConfirm = {
+        deadline = it
+        datePickerDialogVisible = false
+    }) {
+        datePickerDialogVisible = false
     }
 }
 
 
 @Composable
-private fun PlanAddDialog(visible: Boolean, onDismiss: () -> Unit) {
+private fun PlanAddDialog(visible: Boolean, onPickDateRequest: () -> Unit, onDismiss: () -> Unit) {
     if (visible) {
         val context = LocalContext.current
 
         var name by remember { mutableStateOf("") }
         var desc by remember { mutableStateOf("") }
-        var deadline by remember { mutableStateOf("") }
 
         AlertDialog(
             title = { Text(text = "添加计划") },
@@ -169,16 +194,7 @@ private fun PlanAddDialog(visible: Boolean, onDismiss: () -> Unit) {
                         Toast.makeText(context, "请输入一个名字", Toast.LENGTH_SHORT).show()
                         return@TextButton
                     }
-                    if (deadline.isNotBlank()) {
-                        deadline = deadline.replace(Regex("\\D+"), "-")
-                        try {
-                            LocalDate.parse(deadline)
-                        } catch (_: Exception) {
-                            Toast.makeText(context, "期限格式错误", Toast.LENGTH_SHORT).show()
-                            return@TextButton
-                        }
-                    }
-                    PlanController.set(Plan(name, desc, deadline))
+                    PlanController.set(Plan(name, desc, deadline.toString()))
                     Toast.makeText(context, "已添加", Toast.LENGTH_SHORT).show()
                     onDismiss()
                 }) {
@@ -195,11 +211,11 @@ private fun PlanAddDialog(visible: Boolean, onDismiss: () -> Unit) {
                         label = { Text(text = "名称") }
                     )
                     Spacer(modifier = Modifier.height(padding))
-                    AfterglowTextFiled(
-                        value = deadline,
-                        onValueChange = { deadline = it },
-                        label = { Text(text = "截止日期(可选)") },
-                        placeholder = { Text(text = "YYYY-MM-DD", color = Color.Gray) }
+                    ElevatedSuggestionChip(
+                        onClick = {
+                            onPickDateRequest()
+                        },
+                        label = { Text(text = deadline?.toString() ?: "截止日期（可选）") }
                     )
                     Spacer(modifier = Modifier.height(padding))
                     AfterglowTextFiled(
@@ -210,6 +226,38 @@ private fun PlanAddDialog(visible: Boolean, onDismiss: () -> Unit) {
                 }
             }
         )
+    }
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun DatePickerAlertDialog(
+    visible: Boolean,
+    onConfirm: (LocalDate?) -> Unit,
+    onDismiss: () -> Unit
+) {
+    if (visible) {
+        val datePickerState = rememberDatePickerState()
+
+        DatePickerDialog(
+            onDismissRequest = onDismiss,
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        onConfirm(
+                            datePickerState.selectedDateMillis?.let { timeStamp ->
+                                Transformer.localDateOf(Date(timeStamp))
+                            }
+                        )
+                    }
+                ) {
+                    Text(text = "确定")
+                }
+            }
+        ) {
+            DatePicker(state = datePickerState)
+        }
     }
 }
 

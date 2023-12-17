@@ -24,11 +24,11 @@ fun EduSystem.getTeacherInfoList(
     pageIndex: Int = 1,
     teacherInfoList: TeacherInfoList? = null
 ) = flow {
-    val form = HashMap<String, String>().also {
-        it["jsxm"] = name
-        it["ssxy"] = ""
-        it["pageIndex"] = if (pageIndex == 1) "" else pageIndex.toString()
-    }
+    val form = listOf(
+        Pair("jsxm", name),
+        Pair("ssxy", ""),
+        Pair("pageIndex", if (pageIndex == 1) "" else pageIndex.toString())
+    )
 
     val url =
         if (withWebVPN) WebVpnAPI.provideEduSystem(EduSystemAPI.teacherInfoList, 0)

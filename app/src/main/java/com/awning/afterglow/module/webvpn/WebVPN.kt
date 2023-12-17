@@ -38,7 +38,7 @@ class WebVPN(val user: User) {
                     val execution = document.getElementById("execution")!!.attr("value")
                     val salt = document.getElementById("pwdEncryptSalt")!!.attr("value")
 
-                    val form = mapOf(
+                    val form = listOf(
                         Pair("username", user.username),
                         Pair("password", passwordEncode(user.password, salt)),
                         Pair("captcha", ""),

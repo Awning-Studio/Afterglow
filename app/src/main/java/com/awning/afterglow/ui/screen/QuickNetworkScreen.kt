@@ -71,13 +71,6 @@ fun QuickNetworkScreen(navController: NavHostController) {
         title = ModuleRoute.ModuleQuickNetwork.title,
         navController = navController
     ) {
-        FloatingActionButton(
-            onClick = { configDialogVisible = true }, modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(end = 30.dp, bottom = 90.dp)
-        ) {
-            Icon(imageVector = Icons.Rounded.Add, contentDescription = "Add")
-        }
         Column {
             ElevatedCard(
                 onClick = {
@@ -165,6 +158,14 @@ fun QuickNetworkScreen(navController: NavHostController) {
                     }
                 }
             }
+        }
+
+        FloatingActionButton(
+            onClick = { configDialogVisible = true }, modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(end = 30.dp, bottom = 90.dp)
+        ) {
+            Icon(imageVector = Icons.Rounded.Add, contentDescription = "Add")
         }
     }
 

@@ -106,7 +106,7 @@ class EduSystem private constructor(val user: User, val withWebVPN: Boolean) {
          * @return [Flow]
          */
         private fun verify(user: User, captcha: String, withWebVPN: Boolean) = flow {
-            val form = mapOf(
+            val form = listOf(
                 Pair("USERNAME", user.username),
                 Pair("PASSWORD", user.password),
                 Pair("RANDOMCODE", captcha)

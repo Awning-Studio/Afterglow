@@ -95,7 +95,7 @@ import java.time.LocalDate
 
 private val itemIconSize = 19.dp
 
-var datePickerBottomSheetVisible by mutableStateOf(false)
+var meScreenDatePickerBottomSheetVisible by mutableStateOf(false)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -227,7 +227,7 @@ fun MeScreen() {
                         icon = Icons.Rounded.Timelapse,
                         value = schoolStart
                     ) {
-                        datePickerBottomSheetVisible = true
+                        meScreenDatePickerBottomSheetVisible = true
                     }
                 }
                 item {
@@ -604,7 +604,7 @@ private fun LoginDialog(visible: Boolean, initialUser: User?, onDismiss: () -> U
                         },
                         numberOnly = true,
                         enabled = interactable,
-                        label = { Text(text = "账号（学号）") },
+                        label = { Text(text = "学号") },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         singleLine = true,
                     )

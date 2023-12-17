@@ -37,4 +37,10 @@ object EduSystemAPI : APILike {
 
     // 全校课表
     const val timetableAll = "$base/kbcx/kbxx_kc_ifr"
+
+    // 评教
+    const val teachingEvaluationList = "$base/xspj/xspj_find.do"
+
+    // 评教提交
+    const val evaluateTeaching = "$base/xspj/xspj_save.do"
 }

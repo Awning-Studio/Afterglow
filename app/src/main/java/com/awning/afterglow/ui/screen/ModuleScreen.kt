@@ -121,8 +121,7 @@ private fun ModuleBox(
             val note = getNote(it, updateTime, timetableAllUpdateTime)
 
             item {
-                val enabled =
-                    it != ModuleRoute.ModuleTeachingEvaluation && it != ModuleRoute.ModuleCourseSelection
+                val enabled = it != ModuleRoute.ModuleCourseSelection
 
                 ElevatedCard(
                     onClick = { onItemClick(it.route) },
@@ -169,7 +168,7 @@ fun getNote(navRoute: ModuleRoute, updateTime: List<State<Snapshot?>>, timetable
     }
 
     ModuleRoute.ModuleTeachingEvaluation -> {
-        "下次评教开放"
+        "现已开放"
     }
 
     ModuleRoute.ModuleCourseSelection -> {

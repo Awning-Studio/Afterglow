@@ -21,7 +21,7 @@ import org.jsoup.Jsoup
  * @return [Flow]
  */
 fun EduSystem.getTimetableAll(semester: String = EduSystem.Semester) = flow {
-    val form = mapOf(
+    val form = listOf(
         Pair("xnxqh", semester),
         Pair("skyx", ""),                // 上课院系
         Pair("kkyx", ""),                // 开课院系

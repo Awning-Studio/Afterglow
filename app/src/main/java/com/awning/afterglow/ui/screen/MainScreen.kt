@@ -2,6 +2,7 @@ package com.awning.afterglow.ui.screen
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
@@ -25,9 +26,11 @@ import androidx.navigation.compose.rememberNavController
 import com.awning.afterglow.navroute.BottomRoute
 import com.awning.afterglow.toolkit.Transformer
 import com.awning.afterglow.viewmodel.controller.SettingController
+import kotlinx.coroutines.CoroutineScope
 import java.time.LocalDate
 import java.util.Date
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(navController: NavHostController) {
     val innerNavController = rememberNavController()
@@ -58,7 +61,17 @@ fun MainScreen(navController: NavHostController) {
     }
 
 
-    DatePickerBottomSheet()
+    DatePickerBottomSheet(
+        visible = meScreenDatePickerBottomSheetVisible,
+        onSetSelection = { datePickerState ->
+            SettingController.schoolStartFlow().collect {
+                datePickerState.setSelection(Transformer.timeStampOf(LocalDate.parse(it)))
+            }
+        }
+    ) { localDate ->
+        meScreenDatePickerBottomSheetVisible = false
+        localDate?.let { SettingController.setSchoolStart(it.toString()) }
+    }
 }
 
 
@@ -93,32 +106,34 @@ private fun AfterglowBottomBar(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun DatePickerBottomSheet() {
-    if (datePickerBottomSheetVisible) {
+private fun DatePickerBottomSheet(
+    visible: Boolean,
+    onSetSelection: suspend CoroutineScope.(DatePickerState) -> Unit,
+    onDismiss: (LocalDate?) -> Unit
+) {
+    if (visible) {
         val sheetState = rememberModalBottomSheetState()
         val datePickerState = rememberDatePickerState()
 
         // 初始化日期
         LaunchedEffect(key1 = Unit) {
-            SettingController.schoolStartFlow().collect {
-                datePickerState.setSelection(Transformer.timeStampOf(LocalDate.parse(it)))
-            }
+            onSetSelection(this@LaunchedEffect, datePickerState)
         }
 
         ModalBottomSheet(
             sheetState = sheetState,
             onDismissRequest = {
-                datePickerBottomSheetVisible = false
-                datePickerState.selectedDateMillis?.let { timeStamp ->
-                    val localDate = Transformer.localDateOf(Date(timeStamp)).let {
-                        if (it.dayOfWeek.value == 1) {
-                            it
-                        }else {
-                            it.plusDays((1 - it.dayOfWeek.value).toLong())
+                onDismiss(
+                    datePickerState.selectedDateMillis?.let { timeStamp ->
+                        Transformer.localDateOf(Date(timeStamp)).let {
+                            if (it.dayOfWeek.value == 1) {
+                                it
+                            } else {
+                                it.plusDays((1 - it.dayOfWeek.value).toLong())
+                            }
                         }
                     }
-                    SettingController.setSchoolStart(localDate.toString())
-                }
+                )
             }
         ) {
             DatePicker(state = datePickerState)

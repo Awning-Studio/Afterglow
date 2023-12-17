@@ -40,8 +40,10 @@ object NoticeController {
      * 更新最新通知 id
      */
     fun updateLastNoticeId() {
-        SettingController.setLastNoticeId(notices[0].id)
-        _newNoticeCount = 0
+        if (notices.isNotEmpty()) {
+            SettingController.setLastNoticeId(notices[0].id)
+            _newNoticeCount = 0
+        }
     }
 
 
@@ -58,7 +60,7 @@ object NoticeController {
                 // 递归获取
                 suspend fun recursion(page: Int = 0) {
                     if (page < pageCount) {
-                        EduNotice.getList(page).collect { list ->
+                        EduNotice.getList(page).catch {  }.collect { list ->
                             // 确认新通知，以及计数
                             for (index in list.indices) {
                                 if (list[index].id == id) {

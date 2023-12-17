@@ -17,7 +17,7 @@ import org.jsoup.Jsoup
  * @return [Flow]
  */
 fun EduSystem.getExamPlan() = flow {
-    val form = mapOf(
+    val form = listOf(
         Pair("xqlbmc", ""),
         Pair("xnxqid", EduSystem.Semester),
         Pair("xqlb", "")

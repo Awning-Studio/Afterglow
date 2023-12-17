@@ -18,7 +18,7 @@ import org.jsoup.Jsoup
  * @return [Flow]
  */
 fun EduSystem.getSchoolReport() = flow {
-    val form = mapOf(
+    val form = listOf(
         Pair("kksj", ""),
         Pair("kcxz", ""),
         Pair("kcmc", ""),

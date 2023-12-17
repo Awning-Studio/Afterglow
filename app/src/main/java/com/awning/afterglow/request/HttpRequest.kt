@@ -50,7 +50,7 @@ interface HttpRequest {
         method: Method,
         url: String,
         params: Map<String, String>? = null,
-        form: Map<String, String>? = null,
+        form: List<Pair<String, String>>? = null,
         headers: Map<String, String> = HEADERS,
         cookies: List<HttpCookie>? = null,
         timeout: Int = TIMEOUT
@@ -70,7 +70,7 @@ interface HttpRequest {
     fun get(
         url: String,
         params: Map<String, String>? = null,
-        form: Map<String, String>? = null,
+        form: List<Pair<String, String>>? = null,
         headers: Map<String, String> = HEADERS,
         cookies: List<HttpCookie>? = null,
         timeout: Int = TIMEOUT
@@ -90,7 +90,7 @@ interface HttpRequest {
     fun post(
         url: String,
         params: Map<String, String>? = null,
-        form: Map<String, String>? = null,
+        form: List<Pair<String, String>>? = null,
         headers: Map<String, String> = HEADERS,
         cookies: List<HttpCookie>? = null,
         timeout: Int = TIMEOUT

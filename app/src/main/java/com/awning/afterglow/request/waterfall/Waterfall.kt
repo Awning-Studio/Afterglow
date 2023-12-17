@@ -49,7 +49,7 @@ object Waterfall : HttpRequest {
         method: HttpRequest.Method,
         url: String,
         params: Map<String, String>?,
-        form: Map<String, String>?,
+        form: List<Pair<String, String>>?,
         headers: Map<String, String>,
         cookies: List<HttpCookie>?,
         timeout: Int
@@ -101,7 +101,7 @@ object Waterfall : HttpRequest {
         method: HttpRequest.Method,
         url: String,
         params: Map<String, String>?,
-        form: Map<String, String>?,
+        form: List<Pair<String, String>>?,
         headers: Map<String, String>,
         cookies: List<HttpCookie>?,
         timeout: Int

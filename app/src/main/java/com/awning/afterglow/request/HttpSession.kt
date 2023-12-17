@@ -30,7 +30,7 @@ abstract class HttpSession(cookies: List<HttpCookie>? = null) : HttpRequest {
         method: HttpRequest.Method,
         url: String,
         params: Map<String, String>?,
-        form: Map<String, String>?,
+        form: List<Pair<String, String>>?,
         headers: Map<String, String>,
         cookies: List<HttpCookie>?,
         timeout: Int

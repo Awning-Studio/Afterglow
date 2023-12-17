@@ -10,13 +10,14 @@ import com.awning.afterglow.request.mergeHeaders
 import com.awning.afterglow.request.parseCookie
 import java.io.UnsupportedEncodingException
 import java.net.HttpCookie
+import java.net.URLEncoder
 import java.nio.charset.Charset
 
 class WaterRequest(
     method: Int,
     url: String,
     params: Map<String, String>?,
-    private val form: Map<String, String>?,
+    private val form: List<Pair<String, String>>?,
     private val headers: Map<String, String>,
     private val cookies: List<HttpCookie>?,
     private var listener: Response.Listener<HttpResponse>?,
@@ -24,7 +25,6 @@ class WaterRequest(
 ) : Request<HttpResponse>(method, formatURL(url, params), errorListener) {
     // 线程锁
     private val mLock = Any()
-
 
     /**
      * 解析结果
@@ -86,7 +86,16 @@ class WaterRequest(
      * 获取表单
      * @return
      */
-    override fun getParams() = form
+    override fun getBody(): ByteArray {
+        val encodedParams = StringBuilder()
+        form?.forEach {
+            encodedParams.append(URLEncoder.encode(it.first, "UTF-8"))
+            encodedParams.append("=")
+            encodedParams.append(URLEncoder.encode(it.second, "UTF-8"))
+            encodedParams.append("&")
+        }
+        return encodedParams.toString().toByteArray()
+    }
 
 
     /**

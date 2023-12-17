@@ -189,7 +189,7 @@ fun RequestScreen(navController: NavHostController) {
                             method,
                             (if (isHttps) "https://" else "http://") + url,
                             fromPairs(params),
-                            fromPairs(form),
+                            pairsToForm(form),
                             fromPairs(headers)
                         ).catch {
                             Toast.makeText(
@@ -364,6 +364,15 @@ private fun fromPairs(pairs: SnapshotStateList<Pair<String, () -> String>>): Map
     return HashMap<String, String>().also { hashMap ->
         pairs.forEach {
             hashMap[it.first] = it.second()
+        }
+    }
+}
+
+
+private fun pairsToForm(pairs: SnapshotStateList<Pair<String, () -> String>>): List<Pair<String, String>> {
+    return arrayListOf<Pair<String, String>>().also { arrayList ->
+        pairs.forEach {
+            arrayList.add(Pair(it.first, it.second()))
         }
     }
 }
