@@ -24,4 +24,8 @@ object WebVpnAPI : APILike {
     // 外接教务系统
     fun provideEduSystem(route: String, vpnIndex: Int) =
         root + nav("/LjIwNS4yMTguMTY5LjE2NS45NC4xNTMuMTk5LjE2NS4xOTkuMTUxLjk0LjE1OC4xNTEuMjE5Ljk5LjE0OS4yMTE=$route?vpn-${vpnIndex}")
+
+    // 外接第二课堂
+    fun provideSecondClass(route: String) =
+        root + nav("/LjE0OS4yMDYuMTUwLjE2NS4xNDUuMTYwLjIwMi45NC4yMDAuMTUwLjE2NS4xNTkuMTUyLjE0OC4xNTQuMTUwLjIxOC45NS4xNDcuMjEw$route?vpn-12-2ketang.gdufe.edu.cn")
 }

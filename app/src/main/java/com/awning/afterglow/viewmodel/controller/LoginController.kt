@@ -131,7 +131,7 @@ object LoginController {
             val user = User(
                 username,
                 password,
-                secondClassPwd.ifBlank { username },
+                secondClassPwd,
                 session
             )
 
@@ -284,7 +284,7 @@ object LoginController {
 
             // 获取第二课堂成绩
             coroutineScope.launch {
-                SecondClassSystem.login(webVPN.user.username, webVPN.user.secondClassPwd).catch { }
+                SecondClassSystem.login(webVPN.user.username, webVPN.user.secondClassPwd, webVPN).catch { }
                     .collect { secondClassSystem ->
                         secondClassSystem.getReport().catch { }
                             .collect { ModuleController.setSecondClass(it) }
@@ -323,7 +323,10 @@ object LoginController {
                     .collect { resolveLogin(webVPN, it) }
             }
         } else {
-            WebVPN.login(user).collect { webVPN ->
+            WebVPN.login(user).catch {
+                RuntimeVM.isLoggingIn = false
+                throw it
+            }.collect { webVPN ->
                 if (captcha == null && captchaContent == null) {
                     // 无验证码
                     EduSystem.login(webVPN).catch { rejectLogin(it) }

@@ -1,5 +1,7 @@
 package com.awning.afterglow.module.secondclass
 
+import com.awning.afterglow.module.webvpn.WebVPN
+import com.awning.afterglow.module.webvpn.WebVpnAPI
 import com.awning.afterglow.request.waterfall.Waterfall
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -12,7 +14,12 @@ import org.json.JSONObject
  * @property id 第二课堂用户标识
  * @property token 访问令牌
  */
-class SecondClassSystem(val username: String, private val id: Int, private val token: String) {
+class SecondClassSystem(
+    val username: String,
+    private val id: Int,
+    private val token: String,
+    private val webVPN: WebVPN?
+) {
     companion object {
         private val httpRequest = Waterfall
 
@@ -20,9 +27,10 @@ class SecondClassSystem(val username: String, private val id: Int, private val t
          * 登录
          * @param username 学号
          * @param password 密码
+         * @param webVPN WebVPN
          * @return [Flow]
          */
-        fun login(username: String, password: String) = flow {
+        fun login(username: String, password: String, webVPN: WebVPN? = null) = flow {
             val form = listOf(
                 Pair(
                     "para",
@@ -30,7 +38,10 @@ class SecondClassSystem(val username: String, private val id: Int, private val t
                 )
             )
 
-            httpRequest.post(SecondClassSystemAPI.root + SecondClassSystemAPI.login, form = form)
+            val url = webVPN?.let { WebVpnAPI.provideSecondClass(SecondClassSystemAPI.login) }
+                ?: (SecondClassSystemAPI.root + SecondClassSystemAPI.login)
+
+            (webVPN?.user?.session ?: httpRequest).post(url, form = form)
                 .collect {
                     val token = it.headers["X-token"]
                     if (token == null) {
@@ -40,7 +51,8 @@ class SecondClassSystem(val username: String, private val id: Int, private val t
                             SecondClassSystem(
                                 username,
                                 JSONObject(it.text).getJSONObject("data").getInt("id"),
-                                token
+                                token,
+                                webVPN
                             )
                         )
                     }
@@ -57,8 +69,11 @@ class SecondClassSystem(val username: String, private val id: Int, private val t
         val params = mapOf(Pair("para", "{'userId':$id}"))
         val headers = mapOf(Pair("X-Token", token))
 
-        httpRequest.get(
-            SecondClassSystemAPI.root + SecondClassSystemAPI.report,
+        val url = webVPN?.let { WebVpnAPI.provideSecondClass(SecondClassSystemAPI.report) }
+            ?: (SecondClassSystemAPI.root + SecondClassSystemAPI.report)
+
+        (webVPN?.user?.session ?: httpRequest).get(
+            url,
             params,
             headers = headers
         ).collect {

@@ -79,9 +79,9 @@ fun SecondClassScreen(navController: NavHostController) {
 
                                 CircularProgressIndicator(
                                     progress = percentage,
-                                    strokeWidth = if (percentage > 1) 4.dp else 3.dp,
+                                    strokeWidth = if (percentage >= 1) 4.dp else 3.dp,
                                     strokeCap = StrokeCap.Round,
-                                    color = if (percentage > 1) SuccessColor else MaterialTheme.colorScheme.primary,
+                                    color = if (percentage >= 1) SuccessColor else MaterialTheme.colorScheme.primary,
                                     trackColor = MaterialTheme.colorScheme.surfaceVariant,
                                     modifier = Modifier.size(20.dp)
                                 )

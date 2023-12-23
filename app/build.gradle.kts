@@ -78,7 +78,7 @@ dependencies {
     // 导航
     implementation("androidx.navigation:navigation-compose:2.7.2")
     // html解析
-    implementation("org.jsoup:jsoup:1.16.2")
+    implementation("org.jsoup:jsoup:1.17.1")
     // 光学文字识别
     implementation("cz.adaptech.tesseract4android:tesseract4android:4.5.0")
     // viewmodel

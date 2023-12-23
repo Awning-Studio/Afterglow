@@ -25,12 +25,11 @@ private class EvaluateTeachingParser(private val withWebVPN: Boolean, private va
 
         val form = arrayListOf<Pair<String, String>>()
         val children = table.children()
-        var index = 0
-        while (index < children.size - 2) {
+
+        for (index in 0 until children.size - 2) {
             val key = children[index].attr("name")
             val value = if (key == "issubmit") "1" else children[index].attr("value")
             form.add(Pair(key, value))
-            index ++
         }
 
         val items = table.getElementById("table1")!!.getElementsByTag("tr")

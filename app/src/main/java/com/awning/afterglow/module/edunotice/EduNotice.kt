@@ -290,6 +290,13 @@ object EduNotice {
                     return paragraphs
                 }
 
+                "div" -> {
+                    element.children().forEach {
+                        paragraphs.addAll(parseParagraph(it))
+                    }
+                    return paragraphs
+                }
+
                 else -> {
                     return paragraphs
                 }

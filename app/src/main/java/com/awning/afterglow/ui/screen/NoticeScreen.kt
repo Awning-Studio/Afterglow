@@ -61,9 +61,9 @@ import com.awning.afterglow.module.edunotice.ParagraphStyle
 import com.awning.afterglow.navroute.ModuleRoute
 import com.awning.afterglow.request.waterfall.Waterfall
 import com.awning.afterglow.toolkit.Trigger
-import com.awning.afterglow.ui.component.pdfView
 import com.awning.afterglow.ui.component.MTopAppBar
 import com.awning.afterglow.ui.component.loadPDF
+import com.awning.afterglow.ui.component.pdfView
 import com.awning.afterglow.ui.halfOfPadding
 import com.awning.afterglow.ui.padding
 import com.awning.afterglow.ui.twiceOfPadding
@@ -310,37 +310,42 @@ private fun NoticeDetailScreen(navController: NavHostController, noticeContent: 
                                         ) {
                                             for (i in 1 until table.size) {
                                                 val tableItem = table[i] as ArrayList<*>
-                                                tableItem.forEach { item ->
-                                                    item as String
+                                                tableItem.forEach { text ->
+                                                    text as String
                                                     item {
-                                                        Box(
-                                                            contentAlignment = Alignment.Center,
-                                                            modifier = Modifier
-                                                                .weight(1f)
-                                                                .height(itemHeight)
+                                                        LazyColumn(
+                                                            modifier = Modifier.height(
+                                                                itemHeight
+                                                            )
                                                         ) {
-                                                            Spacer(
-                                                                modifier = Modifier
-                                                                    .width(0.5.dp)
-                                                                    .fillParentMaxHeight()
-                                                                    .background(Color.LightGray)
-                                                                    .align(Alignment.TopStart)
-                                                            )
-                                                            if (item.isNotBlank()) {
-                                                                Spacer(
+                                                            item {
+                                                                Box(
+                                                                    contentAlignment = Alignment.Center,
                                                                     modifier = Modifier
-                                                                        .fillMaxWidth()
-                                                                        .height(0.5.dp)
-                                                                        .background(Color.LightGray)
-                                                                        .align(Alignment.TopStart)
-                                                                )
+                                                                        .weight(1f)
+                                                                ) {
+                                                                    Spacer(
+                                                                        modifier = Modifier
+                                                                            .width(0.5.dp)
+                                                                            .fillParentMaxHeight()
+                                                                            .background(Color.LightGray)
+                                                                            .align(Alignment.TopStart)
+                                                                    )
+                                                                    Spacer(
+                                                                        modifier = Modifier
+                                                                            .fillMaxWidth()
+                                                                            .height(0.5.dp)
+                                                                            .background(Color.LightGray)
+                                                                            .align(Alignment.TopStart)
+                                                                    )
+                                                                    Text(
+                                                                        text = text,
+                                                                        fontSize = 9.sp,
+                                                                        lineHeight = 12.sp,
+                                                                        textAlign = TextAlign.Center
+                                                                    )
+                                                                }
                                                             }
-                                                            Text(
-                                                                text = item,
-                                                                fontSize = 9.sp,
-                                                                lineHeight = 12.sp,
-                                                                textAlign = TextAlign.Center
-                                                            )
                                                         }
                                                     }
                                                 }

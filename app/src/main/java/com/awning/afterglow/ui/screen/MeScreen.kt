@@ -452,7 +452,7 @@ private fun LoginDialog(visible: Boolean, initialUser: User?, onDismiss: () -> U
                 if (withWebVPN) {
                     LoginController.getCaptcha(
                         webVPN,
-                        User(username, password, secondClassPwd, session)
+                        User(username, password, secondClassPwd.ifBlank { username }, session)
                     ).catch {
                         Toast.makeText(context, it.message ?: it.toString(), Toast.LENGTH_SHORT)
                             .show()
@@ -492,7 +492,7 @@ private fun LoginDialog(visible: Boolean, initialUser: User?, onDismiss: () -> U
                                 if (withWebVPN) {
                                     LoginController.login(
                                         webVPN,
-                                        User(username, password, secondClassPwd, session),
+                                        User(username, password, secondClassPwd.ifBlank { username }, session),
                                         captchaContent.ifBlank { null },
                                         captcha
                                     ).catch {
@@ -516,7 +516,7 @@ private fun LoginDialog(visible: Boolean, initialUser: User?, onDismiss: () -> U
                                         session,
                                         username,
                                         password,
-                                        secondClassPwd,
+                                        secondClassPwd.ifBlank { username },
                                         captchaContent.ifBlank { null },
                                         captcha
                                     ).catch {
@@ -528,7 +528,7 @@ private fun LoginDialog(visible: Boolean, initialUser: User?, onDismiss: () -> U
                                             ).show()
                                             LoginController.login(
                                                 webVPN,
-                                                User(username, password, secondClassPwd, session),
+                                                User(username, password, secondClassPwd.ifBlank { username }, session),
                                                 captchaContent.ifBlank { null },
                                                 captcha
                                             ).catch {

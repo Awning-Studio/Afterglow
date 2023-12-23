@@ -37,7 +37,7 @@ fun EduSystem.getTimetableAll(semester: String = EduSystem.Semester) = flow {
         if (withWebVPN) WebVpnAPI.provideEduSystem(EduSystemAPI.timetableAll, 0)
         else EduSystemAPI.root + EduSystemAPI.timetableAll
 
-    user.session.post(url, form = form, timeout = 10000)
+    user.session.post(url, form = form, timeout = 16000)
         .collect { httpResponse ->
             TimetableAllParser.parse(httpResponse).collect(this@flow)
         }
