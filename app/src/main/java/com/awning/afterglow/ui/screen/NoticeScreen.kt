@@ -274,7 +274,7 @@ private fun NoticeDetailScreen(navController: NavHostController, noticeContent: 
                                     }
 
                                     ParagraphStyle.Image -> {
-                                        NoticeImageContent(url = paragraph.text[0].text.toString())
+                                        NoticeImageContent(url = paragraph.text[0].url.toString())
                                     }
 
                                     ParagraphStyle.Table -> {

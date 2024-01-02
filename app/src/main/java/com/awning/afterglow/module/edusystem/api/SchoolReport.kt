@@ -58,7 +58,7 @@ data class SchoolReport(
  * @property experimentScore 实验成绩
  * @property examScore 考试成绩
  * @property calculatedScore 总成绩
- * @property credit 学分
+ * @property point 学分
  * @property classHours 学时
  * @property examMode 考核方式
  * @property type 课程属性
@@ -73,7 +73,7 @@ data class SchoolReportItem(
     val experimentScore: String,
     val examScore: String,
     val calculatedScore: String,
-    val credit: String,
+    val point: String,
     val classHours: String,
     val examMode: String,
     val type: String,

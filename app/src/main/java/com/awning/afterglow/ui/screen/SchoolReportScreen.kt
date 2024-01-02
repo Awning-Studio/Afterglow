@@ -102,7 +102,7 @@ fun SchoolReportScreen(navController: NavHostController) {
                                         IconText(
                                             icon = Icons.Rounded.Score,
                                             contentDescription = "Score",
-                                            text = "学分: ${it.credit}"
+                                            text = "学分: ${it.point}"
                                         )
                                         Spacer(modifier = Modifier.height(halfOfPadding))
                                         IconText(

@@ -100,3 +100,4 @@
 -dontwarn javax.annotation.WillClose
 -dontwarn javax.annotation.meta.TypeQualifierDefault
 -dontwarn com.google.errorprone.annotations.MustBeClosed
+-dontwarn org.jspecify.annotations.NullMarked

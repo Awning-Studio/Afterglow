@@ -168,11 +168,11 @@ fun getNote(navRoute: ModuleRoute, updateTime: List<State<Snapshot?>>, timetable
     }
 
     ModuleRoute.ModuleTeachingEvaluation -> {
-        "现已开放"
+        "一键评教"
     }
 
     ModuleRoute.ModuleCourseSelection -> {
-        "下次选课开放"
+        "简单选课"
     }
 
     ModuleRoute.ModuleExamPlan -> {

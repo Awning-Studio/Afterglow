@@ -11,7 +11,7 @@ val NoBorder = BorderStroke(0.dp, Color.Transparent)
 
 @Composable
 fun borderOfSurfaceVariant(width: Dp = 0.5.dp, alpha: Float = 1f) =
-    BorderStroke(0.5.dp, MaterialTheme.colorScheme.surfaceVariant.copy(alpha))
+    BorderStroke(width, MaterialTheme.colorScheme.surfaceVariant.copy(alpha))
 
 @Composable
 fun borderOfGray(width: Dp = 0.5.dp, alpha: Float = 1f) =

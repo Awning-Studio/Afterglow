@@ -130,29 +130,35 @@ private fun SearchScreen(
 ) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
+
     val lazyListState = rememberLazyListState()
     val firstVisibleItemIndex by remember { derivedStateOf { lazyListState.firstVisibleItemIndex } }
     var isLoading by remember { mutableStateOf(false) }
 
     LaunchedEffect(key1 = firstVisibleItemIndex) {
         if (!isLoading && firstVisibleItemIndex != 0 && firstVisibleItemIndex + lazyListState.layoutInfo.visibleItemsInfo.size + 5 >= lazyListState.layoutInfo.totalItemsCount) {
-            isLoading = true
             teacherInfoList?.let { infoList ->
                 if (infoList.currentPage < infoList.totalPages) {
-                    RuntimeVM.eduSystem?.getTeacherInfoList(
-                        name,
-                        infoList.currentPage + 1,
-                        infoList
-                    )?.catch {
-                        isLoading = false
-                        Toast.makeText(
-                            context,
-                            "加载失败: $it",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }?.collect {
-                        onGetTeacherBasicInfoList(it)
-                        isLoading = false
+                    RuntimeVM.eduSystem?.let { eduSystem ->
+                        isLoading = true
+
+                        coroutineScope.launch {
+                            eduSystem.getTeacherInfoList(
+                                name,
+                                infoList.currentPage + 1,
+                                infoList
+                            ).catch {
+                                isLoading = false
+                                Toast.makeText(
+                                    context,
+                                    "加载失败: $it",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }.collect {
+                                onGetTeacherBasicInfoList(it)
+                                isLoading = false
+                            }
+                        }
                     }
                 }
             }

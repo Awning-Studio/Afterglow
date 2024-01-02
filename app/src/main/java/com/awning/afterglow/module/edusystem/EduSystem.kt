@@ -64,7 +64,11 @@ class EduSystem private constructor(val user: User, val withWebVPN: Boolean) {
             return if (month in 2..8) {
                 "${year - 1}-$year-2"
             } else {
-                "$year-${year + 1}-1"
+                if (month == 1) {
+                    "${year - 1}-$year-1"
+                }else {
+                    "$year-${year + 1}-1"
+                }
             }
         }
 

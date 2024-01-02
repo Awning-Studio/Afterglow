@@ -229,7 +229,7 @@ object EduNotice {
                                                 it.add(
                                                     ParagraphPart(
                                                         "",
-                                                        child.attr("src")
+                                                        fixURL(EduNoticeAPI.root, child.attr("src"))
                                                     )
                                                 )
                                             }
